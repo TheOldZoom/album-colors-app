@@ -1,6 +1,8 @@
 'use client';
 
-import {useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
+
+const DRAG_THRESHOLD = 5;
 
 export default function Draggable({
   rootClass = '',
@@ -10,45 +12,96 @@ export default function Draggable({
   children: React.ReactNode;
 }) {
   const ourRef = useRef<HTMLDivElement | null>(null);
-  const [isMouseDown, setIsMouseDown] = useState(false);
-  const mouseCoords = useRef({
+  const [isDragging, setIsDragging] = useState(false);
+
+  const dragState = useRef({
     startX: 0,
     scrollLeft: 0,
+    moved: false,
   });
 
-  const handleDragStart = (e: {pageX: number}) => {
-    if (!ourRef.current) return;
+  const endDrag = useCallback(() => setIsDragging(false), []);
+
+  const handlePointerMove = useCallback((clientX: number) => {
     const slider = ourRef.current;
-    const startX = e.pageX - slider.offsetLeft;
-    const scrollLeft = slider.scrollLeft;
-    mouseCoords.current = {startX, scrollLeft};
-    setIsMouseDown(true);
-    document.body.style.cursor = 'grabbing';
+    if (!slider) return;
+
+    const x = clientX - slider.offsetLeft;
+    const delta = x - dragState.current.startX;
+
+    if (!dragState.current.moved && Math.abs(delta) > DRAG_THRESHOLD) {
+      dragState.current.moved = true;
+    }
+
+    if (dragState.current.moved) {
+      slider.scrollLeft = dragState.current.scrollLeft - delta;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const onMouseMove = (e: MouseEvent) => handlePointerMove(e.pageX);
+    const onTouchMove = (e: TouchEvent) =>
+      handlePointerMove(e.touches[0].pageX);
+    const onMouseUp = () => endDrag();
+    const onTouchEnd = () => endDrag();
+    const onBlur = () => endDrag();
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('touchmove', onTouchMove);
+    window.addEventListener('touchend', onTouchEnd);
+    window.addEventListener('blur', onBlur);
+
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+      window.removeEventListener('blur', onBlur);
+    };
+  }, [isDragging, handlePointerMove, endDrag]);
+
+  const startDrag = (clientX: number) => {
+    const slider = ourRef.current;
+    if (!slider) return;
+    dragState.current = {
+      startX: clientX - slider.offsetLeft,
+      scrollLeft: slider.scrollLeft,
+      moved: false,
+    };
+    setIsDragging(true);
   };
 
-  const handleDragEnd = () => {
-    setIsMouseDown(false);
-    document.body.style.cursor = 'default';
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0) return;
+    startDrag(e.pageX);
   };
 
-  const handleDrag = (e: {preventDefault: () => void; pageX: number}) => {
-    if (!isMouseDown || !ourRef.current) return;
-    e.preventDefault();
-    const slider = ourRef.current;
-    const x = e.pageX - slider.offsetLeft;
-    const walkX = (x - mouseCoords.current.startX) * 1.5;
-    slider.scrollLeft = mouseCoords.current.scrollLeft - walkX;
+  const handleTouchStart = (e: React.TouchEvent) => {
+    startDrag(e.touches[0].pageX);
+  };
+
+  const handleClickCapture = (e: React.MouseEvent) => {
+    if (dragState.current.moved) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
   };
 
   return (
     <div
       ref={ourRef}
-      onMouseDown={handleDragStart}
-      onMouseUp={handleDragEnd}
-      onMouseMove={handleDrag}
+      onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
+      onClickCapture={handleClickCapture}
+      onDragStart={e => e.preventDefault()}
       className={
         rootClass +
-        ' mt-16 lg:mt-[104px] flex overflow-x-scroll container-class transition-transform duration-300 scroll-snap-type-x mandatory scroll-smooth'
+        ` mt-16 lg:mt-[104px] flex overflow-x-scroll select-none ${
+          isDragging ? 'cursor-grabbing' : 'cursor-grab'
+        }`
       }
     >
       {children}
