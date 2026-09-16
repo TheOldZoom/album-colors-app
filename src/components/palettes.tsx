@@ -12,11 +12,24 @@ export default function Palettes({
   allAlbums: Album[];
   data: Artist[];
 }) {
-  const initialCopiedStates = Array(allAlbums[0].palettes.length).fill(false);
+  const initialCopiedStates =
+    allAlbums.length > 0 ? Array(allAlbums[0].palettes.length).fill(false) : [];
 
   const [currentPaletteIndex, setCurrentPaletteIndex] = useState(0);
   const [copiedStates, setCopiedStates] =
     useState<boolean[]>(initialCopiedStates);
+
+  if (allAlbums.length === 0) {
+    return (
+      <Wrapper>
+        <div className="mt-6 text-center text-grey text-sm">
+          <p className="uppercase font-bold mb-2">No albums found</p>
+        </div>
+      </Wrapper>
+    );
+  }
+
+  const currentAlbum = allAlbums[currentPaletteIndex];
 
   const nextPalette = () => {
     setCopiedStates(initialCopiedStates);
@@ -78,7 +91,6 @@ export default function Palettes({
   }
 
   const handleDownload = () => {
-    const currentAlbum = allAlbums[currentPaletteIndex];
     const artist = data.find(artist =>
       artist.albums.some(album => album.album_id === currentAlbum.album_id),
     );
@@ -94,7 +106,7 @@ export default function Palettes({
   };
 
   const handleCopy = (paletteIndex: number) => {
-    const palette = allAlbums[currentPaletteIndex].palettes[paletteIndex];
+    const palette = currentAlbum.palettes[paletteIndex];
     navigator.clipboard.writeText(palette);
     setCopiedStates(prevState => {
       const newState = [...prevState];
@@ -127,7 +139,7 @@ export default function Palettes({
 
       <Wrapper>
         <div className="mt-6 grid grid-cols-1 md:grid-cols-5 gap-4 lg:gap-9 md:h-[calc(100vw-75.694vw)]">
-          {allAlbums[currentPaletteIndex].palettes.map((palette, index) => (
+          {currentAlbum.palettes.map((palette, index) => (
             <div
               key={index}
               className="w-full h-24 md:h-full rounded relative cursor-pointer group"

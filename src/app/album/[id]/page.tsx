@@ -7,7 +7,10 @@ import {supabase} from '@/utils/supabase';
 import AlbumTable from '@/components/album-table';
 import {external} from '@/assets/images';
 
-export async function generateMetadata(props: {params: Promise<{id: string}>}, parent: ResolvingMetadata): Promise<Metadata> {
+export async function generateMetadata(
+  props: {params: Promise<{id: string}>},
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const params = await props.params;
   const id = params.id;
 

@@ -32,9 +32,10 @@ async function GeneratorContent() {
     .select('*')
     .order('created_at', {ascending: false});
 
-  const allAlbums = data?.reduce((acc: Album[], artist) => {
-    return [...acc, ...artist.albums];
-  }, []);
+  const allAlbums =
+    data?.reduce((acc: Album[], artist) => {
+      return [...acc, ...artist.albums];
+    }, []) || [];
 
   return <Palettes allAlbums={allAlbums} data={data || []} />;
 }

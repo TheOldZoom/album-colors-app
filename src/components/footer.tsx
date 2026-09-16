@@ -23,7 +23,9 @@ export default function Footer() {
           TWITTER
         </a>
       </div>
-      <p>© <CopyrightYear /> ALL RIGHTS RESERVED</p>
+      <p>
+        © <CopyrightYear /> ALL RIGHTS RESERVED
+      </p>
     </footer>
   );
 }

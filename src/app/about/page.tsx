@@ -76,7 +76,8 @@ export default async function About() {
               className="hover:underline"
             >
               Dayo
-            </a> {' '} or {' '}
+            </a>{' '}
+            or{' '}
             <a
               href="mailto:ajibike.oyinda@gmail.com"
               target="_blank"

@@ -4,6 +4,7 @@ import {useSearchParams} from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import {Album, Artist} from '@/types';
+import Wrapper from './wrapper';
 
 export default function SearchClient({data}: {data: Artist[]}) {
   const searchParams = useSearchParams();
@@ -62,7 +63,11 @@ export default function SearchClient({data}: {data: Artist[]}) {
               )}
           </div>
         ) : (
-          <p className="text-grey">No results found.</p>
+          <Wrapper>
+            <div className="mt-6 text-center text-grey text-sm">
+              <p className="uppercase font-bold mb-2">No albums found</p>
+            </div>
+          </Wrapper>
         )
       ) : (
         <p className="text-grey">You haven&apos;t searched for anything yet.</p>

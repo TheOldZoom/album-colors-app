@@ -41,10 +41,7 @@ async function AlbumGrid() {
     <>
       <AlbumCardGrid data={data as Album[]} />
       <div className="hidden lg:flex items-center justify-center gap-1 whitespace-nowrap group m-auto">
-        <Link
-          href="/archive"
-          className="text-grey text-sm font-bold uppercase"
-        >
+        <Link href="/archive" className="text-grey text-sm font-bold uppercase">
           See all albums
         </Link>
         <Image
@@ -65,7 +62,9 @@ export default function Home() {
       <main>
         <Draggable rootClass={'drag'}>
           <Grid>
-            <Suspense fallback={<div className="animate-pulse bg-grey-100 h-64" />}>
+            <Suspense
+              fallback={<div className="animate-pulse bg-grey-100 h-64" />}
+            >
               <AlbumGrid />
             </Suspense>
           </Grid>
