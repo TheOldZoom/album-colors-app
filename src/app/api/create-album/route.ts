@@ -201,13 +201,6 @@ export async function POST(request: NextRequest) {
     artistName,
   );
 
-  console.log('[Create] Apple Music data:', {
-    title: spotifyAlbum.name,
-    artist: artistName,
-    url: appleMusicData.url,
-    genres: appleMusicData.genres,
-  });
-
   const newAlbum: Album = {
     album_id: albumIdStr,
     album_title: spotifyAlbum.name,

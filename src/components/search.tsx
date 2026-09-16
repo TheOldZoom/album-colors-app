@@ -41,7 +41,7 @@ export default function SearchClient({data}: {data: Artist[]}) {
     setItLoading(true);
     try {
       const res = await fetch(
-        `/api/search-itunes?q=${encodeURIComponent(query)}`,
+        `/api/search-spotify?q=${encodeURIComponent(query)}`,
       );
       const json = await res.json();
       setItResults(json.results || []);
