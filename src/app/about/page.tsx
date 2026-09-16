@@ -23,13 +23,20 @@ const metadata: Metadata = {
   },
 };
 
+const contributors = [
+  {
+    name: 'TheOldZoom',
+    url: 'https://github.com/TheOldZoom',
+  },
+];
+
 export default async function About() {
   return (
     <Wrapper className="md:grow">
-      <main className="mt-20 flex flex-col items-start justify-center gap-10 max-w-xl mx-auto">
+      <main className="mx-auto mt-20 flex max-w-xl flex-col items-start justify-center gap-10">
         <div className="text-sm">
-          <p className="uppercase text-grey font-bold">ABOUT ALBUM COLOURS</p>
-          <p className="mt-4 text-grey-800 font-medium">
+          <p className="font-bold uppercase text-grey">ABOUT ALBUM COLOURS</p>
+          <p className="mt-4 font-medium text-grey-800">
             Album Colours is an open-source visual directory that draws colour
             palette inspiration from music album covers. We hope to help
             designers and other creatives get visual inspiration from their
@@ -38,9 +45,11 @@ export default async function About() {
             after all.
           </p>
         </div>
+
         <div className="text-sm">
-          <p className="uppercase text-grey font-bold">WHO ARE WE</p>
-          <p className="mt-4 text-grey-800 font-medium">
+          <p className="font-bold uppercase text-grey">WHO ARE WE</p>
+
+          <p className="mt-4 font-medium text-grey-800">
             <a
               href="https://read.cv/dammy"
               target="_blank"
@@ -51,7 +60,8 @@ export default async function About() {
             </a>{' '}
             - pixels bending product designer
           </p>
-          <p className="text-grey-800 font-medium">
+
+          <p className="font-medium text-grey-800">
             <a
               href="https://dayoawobeku.com"
               target="_blank"
@@ -64,28 +74,43 @@ export default async function About() {
             applications
           </p>
         </div>
+
         <div className="text-sm">
-          <p className="uppercase text-grey font-bold">CONTACT US</p>
-          <p className="mt-4 text-grey-800 font-medium">
+          <p className="font-bold uppercase text-grey">CONTACT US</p>
+
+          <p className="mt-4 font-medium text-grey-800">
             If you’d like to contribute to our efforts or get in touch for any
             other reason, shoot a mail to{' '}
-            <a
-              href="mailto:dayoawobeku@gmail.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:underline"
-            >
+            <a href="mailto:dayoawobeku@gmail.com" className="hover:underline">
               Dayo
             </a>{' '}
             or{' '}
             <a
               href="mailto:ajibike.oyinda@gmail.com"
-              target="_blank"
-              rel="noopener noreferrer"
               className="hover:underline"
             >
               Oyindamola
             </a>
+          </p>
+        </div>
+
+        <div className="text-sm">
+          <p className="font-bold uppercase text-grey">CONTRIBUTORS</p>
+
+          <p className="mt-4 font-medium text-grey-800">
+            {contributors.map((contributor, index) => (
+              <span key={contributor.name}>
+                <a
+                  href={contributor.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  {contributor.name}
+                </a>
+                {index < contributors.length - 1 && ', '}
+              </span>
+            ))}
           </p>
         </div>
       </main>
