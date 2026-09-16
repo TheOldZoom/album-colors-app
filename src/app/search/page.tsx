@@ -5,11 +5,11 @@ import {supabase} from '@/utils/supabase';
 import Wrapper from '@/components/wrapper';
 
 const metadata: Metadata = {
-  title: 'Search Albums and Artistes | Find Color Inspiration in Music',
+  title: 'Search Albums and Artists | Find Color Inspiration in Music',
   description:
     'Search and discover a diverse range of albums and artists to inspire your creativity with captivating color palettes',
   openGraph: {
-    title: 'Search Albums and Artistes | Find Color Inspiration in Music',
+    title: 'Search Albums and Artists | Find Color Inspiration in Music',
     description:
       'Search and discover a diverse range of albums and artists to inspire your creativity with captivating color palettes',
     images:
@@ -17,7 +17,7 @@ const metadata: Metadata = {
     url: 'https://albumcolours.co/search',
   },
   twitter: {
-    title: 'Search Albums and Artistes | Find Color Inspiration in Music',
+    title: 'Search Albums and Artists | Find Color Inspiration in Music',
     description:
       'Search and discover a diverse range of albums and artists to inspire your creativity with captivating color palettes',
     images: {

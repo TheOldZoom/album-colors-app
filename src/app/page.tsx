@@ -13,12 +13,12 @@ import Wrapper from '@/components/wrapper';
 const metadata: Metadata = {
   title: 'Album Colors | Color palettes from your favorite music album covers',
   description:
-    "Discover vibrant color palettes inspired by your favorite artiste's album covers",
+    "Discover vibrant color palettes inspired by your favorite artist's album covers",
   openGraph: {
     title:
       'Album Colors | Color palettes from your favorite music album covers',
     description:
-      "Discover vibrant color palettes inspired by your favorite artiste's album covers",
+      "Discover vibrant color palettes inspired by your favorite artist's album covers",
     images:
       'https://res.cloudinary.com/dedywga3v/image/upload/v1698911657/meta_image_guzgce.png',
     url: 'https://albumcolours.co',
@@ -27,7 +27,7 @@ const metadata: Metadata = {
     title:
       'Album Colors | Color palettes from your favorite music album covers',
     description:
-      "Discover vibrant color palettes inspired by your favorite artiste's album covers",
+      "Discover vibrant color palettes inspired by your favorite artist's album covers",
     images: {
       url: 'https://res.cloudinary.com/dedywga3v/image/upload/v1698911657/meta_image_guzgce.png',
     },

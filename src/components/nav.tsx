@@ -105,7 +105,7 @@ export default function Nav() {
               <input
                 type="search"
                 className="h-6 sm:h-4 placeholder:text-grey uppercase font-bold placeholder:text-sm sm:text-sm outline-none w-[calc(100vw-32px)] sm:w-60"
-                placeholder="SEARCH AN ALBUM OR ARTISTE"
+                placeholder="SEARCH AN ALBUM OR ARTIST"
                 name="search"
                 aria-label="Search"
                 defaultValue={searchParams?.get('q') || ''}

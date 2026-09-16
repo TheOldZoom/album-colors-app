@@ -33,7 +33,7 @@ export default async function About() {
             Album Colours is an open-source visual directory that draws colour
             palette inspiration from music album covers. We hope to help
             designers and other creatives get visual inspiration from their
-            albums of choice. We are constantly updating new album covers and
+            albums of choice. We are constantly adding new album covers and
             colour information. There are possibly millions of album covers
             after all.
           </p>
