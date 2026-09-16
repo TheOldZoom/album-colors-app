@@ -1,5 +1,6 @@
 import type {Metadata, ResolvingMetadata} from 'next';
 import Image from 'next/image';
+import {notFound} from 'next/navigation';
 import {Suspense} from 'react';
 import NextPrevAlbum from '@/components/next-prev-album';
 import {Album} from '@/types';
@@ -20,9 +21,17 @@ export async function generateMetadata(
     artist => artist?.albums?.some((album: Album) => album?.album_id === id),
   );
 
+  if (!artiste?.albums) {
+    return {title: 'Album Not Found'};
+  }
+
   const album: Album = artiste.albums.find(
     (album: Album) => album?.album_id === id,
   );
+
+  if (!album) {
+    return {title: 'Album Not Found'};
+  }
 
   const previousImages = (await parent).openGraph?.images || [];
 
@@ -55,9 +64,17 @@ async function AlbumContent(props: {params: Promise<{id: string}>}) {
     artist => artist?.albums?.some((album: Album) => album?.album_id === id),
   );
 
+  if (!artiste?.albums) {
+    notFound();
+  }
+
   const album: Album = artiste.albums.find(
     (album: Album) => album?.album_id === id,
   );
+
+  if (!album) {
+    notFound();
+  }
 
   const truncate = (str: string, n: number) => {
     return str.length > n ? str.substring(0, n - 1) + '...' : str;
@@ -107,14 +124,18 @@ async function AlbumContent(props: {params: Promise<{id: string}>}) {
               </p>
               <p className="hidden truncated-text text-grey-700 font-semibold text-sm pt-4 text-center px-4">
                 {album.genres
-                  .map(genre => genre[0].toUpperCase() + genre.slice(1))
-                  .join(', ') || '-'}
+                  ? album.genres
+                      .map(genre => genre[0].toUpperCase() + genre.slice(1))
+                      .join(', ') || '-'
+                  : '-'}
               </p>
               <p className="sm:hidden text-grey-700 font-semibold text-sm pt-4 text-center">
                 {truncate(
                   album.genres
-                    .map(genre => genre[0].toUpperCase() + genre.slice(1))
-                    .join(', ') || '-',
+                    ? album.genres
+                        .map(genre => genre[0].toUpperCase() + genre.slice(1))
+                        .join(', ') || '-'
+                    : '-',
                   30,
                 )}
               </p>
@@ -138,12 +159,14 @@ async function AlbumContent(props: {params: Promise<{id: string}>}) {
           height={500}
           priority
         />
-      </div>
-
-      <div className="hidden lg:block relative w-[calc(100vw-72.22vw)] h-[calc(100vw-72.22vw)] basis-1/3 group">
-        <div className="absolute w-full left-1/2 -translate-x-1/2 z-10 top-1/2 -translate-y-1/2 flex items-center justify-center gap-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <div className="flex items-center justify-center gap-4 mt-4">
           <a
-            href={album.album_url}
+            href={
+              album.album_url ||
+              `https://open.spotify.com/search/${encodeURIComponent(
+                `${album.album_title} ${artiste.name}`,
+              )}`
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="uppercase text-xs font-semibold text-grey flex items-center bg-white p-2"
@@ -152,7 +175,45 @@ async function AlbumContent(props: {params: Promise<{id: string}>}) {
             <Image src={external} alt="external" width={24} height={24} />
           </a>
           <a
-            href={album.apple_music_url}
+            href={
+              album.apple_music_url ||
+              `https://music.apple.com/us/search?term=${encodeURIComponent(
+                `${album.album_title} ${artiste.name}`,
+              )}`
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            className="uppercase text-xs font-semibold text-grey flex items-center bg-white p-2"
+          >
+            <p>Apple Music</p>
+            <Image src={external} alt="external" width={24} height={24} />
+          </a>
+        </div>
+      </div>
+
+      <div className="hidden lg:block relative w-[calc(100vw-72.22vw)] h-[calc(100vw-72.22vw)] basis-1/3 group">
+        <div className="absolute w-full left-1/2 -translate-x-1/2 z-10 top-1/2 -translate-y-1/2 flex items-center justify-center gap-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <a
+            href={
+              album.album_url ||
+              `https://open.spotify.com/search/${encodeURIComponent(
+                `${album.album_title} ${artiste.name}`,
+              )}`
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            className="uppercase text-xs font-semibold text-grey flex items-center bg-white p-2"
+          >
+            <p>Spotify</p>
+            <Image src={external} alt="external" width={24} height={24} />
+          </a>
+          <a
+            href={
+              album.apple_music_url ||
+              `https://music.apple.com/us/search?term=${encodeURIComponent(
+                `${album.album_title} ${artiste.name}`,
+              )}`
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="uppercase text-xs font-semibold text-grey flex items-center bg-white p-2"

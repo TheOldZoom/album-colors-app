@@ -126,13 +126,13 @@ export default function Palettes({
   return (
     <>
       <div className="flex flex-wrap items-center gap-4 sm:gap-9 justify-end text-grey text-xs font-bold">
-        <button onClick={nextPalette} className="uppercase">
+        <button onClick={nextPalette} className="uppercase text-xs font-bold px-4 py-2 border border-grey-500 text-grey hover:bg-grey-500 hover:text-white transition-colors">
           next palette
         </button>
-        <button onClick={previousPalette} className="uppercase">
+        <button onClick={previousPalette} className="uppercase text-xs font-bold px-4 py-2 border border-grey-500 text-grey hover:bg-grey-500 hover:text-white transition-colors">
           previous palette
         </button>
-        <button onClick={handleDownload} className="uppercase">
+        <button onClick={handleDownload} className="uppercase text-xs font-bold px-4 py-2 border border-grey-500 text-grey hover:bg-grey-500 hover:text-white transition-colors">
           download
         </button>
       </div>
