@@ -1,12 +1,8 @@
 import type {Metadata} from 'next';
+import {Suspense} from 'react';
 import {supabase} from '@/utils/supabase';
 import ArchiveClient from '@/components/archive-client';
 import Wrapper from '@/components/wrapper';
-
-// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
-// Remove this opt-out after verifying the segment passes validation without it.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 const metadata: Metadata = {
   title: 'Album Colors Archive | Explore a Visual Journey Through Music',
@@ -30,18 +26,22 @@ const metadata: Metadata = {
   },
 };
 
-export const revalidate = 0;
-
-export default async function Archive() {
-  const {data, error} = await supabase
+async function ArchiveContent() {
+  const {data} = await supabase
     .from('artistes')
     .select('*')
     .order('created_at', {ascending: false});
 
+  return <ArchiveClient data={data || []} />;
+}
+
+export default function Archive() {
   return (
     <Wrapper className="grow">
       <main className="relative mt-16 sm:mt-24 basis-full flex items-start justify-between lg:pr-[3.4%]">
-        <ArchiveClient data={data || []} />
+        <Suspense fallback={<div className="animate-pulse bg-grey-100 h-64" />}>
+          <ArchiveContent />
+        </Suspense>
       </main>
     </Wrapper>
   );

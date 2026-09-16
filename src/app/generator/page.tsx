@@ -1,12 +1,8 @@
 import type {Metadata} from 'next';
+import {Suspense} from 'react';
 import {supabase} from '@/utils/supabase';
 import {Album} from '@/types';
 import Palettes from '@/components/palettes';
-
-// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
-// Remove this opt-out after verifying the segment passes validation without it.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 const metadata: Metadata = {
   title: 'Album Colors Generator | Color Palettes from Music Albums',
@@ -30,10 +26,8 @@ const metadata: Metadata = {
   },
 };
 
-export const revalidate = 0;
-
-export default async function Generator() {
-  const {data, error} = await supabase
+async function GeneratorContent() {
+  const {data} = await supabase
     .from('artistes')
     .select('*')
     .order('created_at', {ascending: false});
@@ -42,9 +36,15 @@ export default async function Generator() {
     return [...acc, ...artist.albums];
   }, []);
 
+  return <Palettes allAlbums={allAlbums} data={data || []} />;
+}
+
+export default function Generator() {
   return (
     <main className="grow mt-16 sm:mt-24">
-      <Palettes allAlbums={allAlbums} data={data || []} />
+      <Suspense fallback={<div className="animate-pulse bg-grey-100 h-64" />}>
+        <GeneratorContent />
+      </Suspense>
     </main>
   );
 }

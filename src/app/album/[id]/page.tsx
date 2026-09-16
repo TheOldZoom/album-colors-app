@@ -1,17 +1,11 @@
 import type {Metadata, ResolvingMetadata} from 'next';
 import Image from 'next/image';
+import {Suspense} from 'react';
 import NextPrevAlbum from '@/components/next-prev-album';
 import {Album} from '@/types';
 import {supabase} from '@/utils/supabase';
 import AlbumTable from '@/components/album-table';
 import {external} from '@/assets/images';
-
-// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
-// Remove this opt-out after verifying the segment passes validation without it.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
-export const revalidate = 0;
 
 export async function generateMetadata(props: {params: Promise<{id: string}>}, parent: ResolvingMetadata): Promise<Metadata> {
   const params = await props.params;
@@ -27,7 +21,6 @@ export async function generateMetadata(props: {params: Promise<{id: string}>}, p
     (album: Album) => album?.album_id === id,
   );
 
-  // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
@@ -49,11 +42,11 @@ export async function generateMetadata(props: {params: Promise<{id: string}>}, p
   };
 }
 
-export default async function AlbumPage(props: {params: Promise<{id: string}>}) {
+async function AlbumContent(props: {params: Promise<{id: string}>}) {
   const params = await props.params;
   const id = params.id;
 
-  const {data, error} = await supabase.from('artistes').select('*');
+  const {data} = await supabase.from('artistes').select('*');
 
   const artiste = data?.find(
     artist => artist?.albums?.some((album: Album) => album?.album_id === id),
@@ -185,5 +178,13 @@ export default async function AlbumPage(props: {params: Promise<{id: string}>}) 
         </p>
       </div>
     </main>
+  );
+}
+
+export default function AlbumPage(props: {params: Promise<{id: string}>}) {
+  return (
+    <Suspense fallback={<div className="animate-pulse bg-grey-100 h-64" />}>
+      <AlbumContent params={props.params} />
+    </Suspense>
   );
 }

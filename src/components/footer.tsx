@@ -1,3 +1,8 @@
+async function CopyrightYear() {
+  'use cache';
+  return <>{new Date().getFullYear()}</>;
+}
+
 export default function Footer() {
   return (
     <footer className="pt-10 mt-auto md:mt-20 relative flex items-center justify-between text-grey text-sm font-bold uppercase flex-wrap sm:flex-nowrap gap-4 sm:gap-0">
@@ -18,7 +23,7 @@ export default function Footer() {
           TWITTER
         </a>
       </div>
-      <p>© {new Date().getFullYear()} ALL RIGHTS RESERVED</p>
+      <p>© <CopyrightYear /> ALL RIGHTS RESERVED</p>
     </footer>
   );
 }

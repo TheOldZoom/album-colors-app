@@ -1,12 +1,8 @@
 import type {Metadata} from 'next';
+import {Suspense} from 'react';
 import SearchClient from '@/components/search';
 import {supabase} from '@/utils/supabase';
 import Wrapper from '@/components/wrapper';
-
-// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
-// Remove this opt-out after verifying the segment passes validation without it.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 const metadata: Metadata = {
   title: 'Search Albums and Artistes | Find Color Inspiration in Music',
@@ -30,15 +26,18 @@ const metadata: Metadata = {
   },
 };
 
-export const revalidate = 0;
+async function SearchResults() {
+  const {data} = await supabase.from('artistes').select('*');
+  return <SearchClient data={data || []} />;
+}
 
-export default async function Search() {
-  const {data, error} = await supabase.from('artistes').select('*');
-
+export default function Search() {
   return (
     <Wrapper className="grow">
       <main className="mt-16 sm:mt-24">
-        <SearchClient data={data || []} />
+        <Suspense fallback={<div className="animate-pulse bg-grey-100 h-64" />}>
+          <SearchResults />
+        </Suspense>
       </main>
     </Wrapper>
   );
