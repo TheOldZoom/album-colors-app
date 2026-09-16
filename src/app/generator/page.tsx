@@ -3,6 +3,11 @@ import {supabase} from '@/utils/supabase';
 import {Album} from '@/types';
 import Palettes from '@/components/palettes';
 
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 const metadata: Metadata = {
   title: 'Album Colors Generator | Color Palettes from Music Albums',
   description:
